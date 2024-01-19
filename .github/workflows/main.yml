@@ -24,7 +24,6 @@ jobs:
           run_install: |
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
-            - args: [typescript]
       - uses: actions/setup-node@v3
         with:
           node-version: 20.x
