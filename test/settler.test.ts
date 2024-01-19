@@ -31,7 +31,7 @@ describe("Settler class", () => {
 
   it("should clear the queue", async () => {
     await settler.settle([1, 2, 3], async (item) => item);
-    settler.clear();
+    settler.stop();
     expect(settler.status.pendingCount).toBe(0);
     expect(settler.status.activeCount).toBe(0);
   });

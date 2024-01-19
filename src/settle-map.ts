@@ -18,7 +18,7 @@ const settleMap = <T, R>(
       return settler.status;
     },
     on: settler.on.bind(settler),
-    clear: () => settler.clear(),
+    stop: () => settler.stop(),
   };
 };
 

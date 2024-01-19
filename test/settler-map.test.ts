@@ -8,7 +8,7 @@ test("should settle promises and return results", async () => {
   const settle = settleMap(items, async (item) => item);
 
   expect(settle.all).instanceOf(Promise);
-  expect(settle.clear).instanceOf(Function);
+  expect(settle.stop).instanceOf(Function);
   expect(settle.on).instanceOf(Function);
   expect(await settle.all).toEqual({
     values: items,
@@ -33,7 +33,7 @@ test("should return correct status", () => {
   expect(settle.status().pendingCount).toBe(5);
   expect(settle.status().activeCount).toBe(0);
 
-  settle.clear();
+  settle.stop();
 
   expect(settle.status().pendingCount).toBe(0);
   expect(settle.status().activeCount).toBe(0);

@@ -32,8 +32,10 @@ class Settler<T, R> {
     };
   }
 
-  public clear() {
-    return this.limit.clearQueue();
+  public stop() {
+    this.limit.clearQueue();
+
+    return this.result;
   }
 
   private handleItem(
