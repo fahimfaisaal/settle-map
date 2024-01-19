@@ -23,7 +23,7 @@ const settled = settleMap(
 
 ### Get live response by listening events
 
-Get response on resolve any item immediettly
+Get response on resolve any item immediately
 
 ```ts
 settled.on("resolve", ({ value, index }) => {
@@ -31,7 +31,7 @@ settled.on("resolve", ({ value, index }) => {
 });
 ```
 
-Get result immediettl on reject any item
+Get result immediately on reject any item
 
 ```ts
 settled.on("reject", ({ error, item, index }) => {
@@ -39,7 +39,7 @@ settled.on("reject", ({ error, item, index }) => {
 });
 ```
 
-Get response immediettl on retry any item
+Get response immediately on retry any item
 
 ```ts
 settled.on("retry", ({ error, retry, item, index }) => {
