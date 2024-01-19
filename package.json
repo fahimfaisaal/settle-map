@@ -12,7 +12,7 @@
     "test": "vitest run",
     "lint": "tsc",
     "ci": "pnpm run lint && pnpm run test && pnpm run build",
-    "release": "pnpm ci && changeset publish"
+    "release": "pnpm run ci && changeset publish"
   },
   "dependencies": {
     "p-limit": "^4.0.0"
