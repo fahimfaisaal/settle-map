@@ -1,6 +1,16 @@
 name: CI
 on:
   push:
+    paths: &trigger_paths
+      - "src/**"
+      - "test/**"
+      - ".github/workflows/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+    branches:
+      - "**"
+  pull_request:
+    paths: *trigger_paths
     branches:
       - "**"
 
