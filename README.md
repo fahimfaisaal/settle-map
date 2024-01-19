@@ -1,6 +1,6 @@
-<h1 align="center">Settle Map</h1>
+# Settle Map
 
-Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency.
+> Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency.
 
 ## How it works
 
