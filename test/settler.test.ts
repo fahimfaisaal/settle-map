@@ -3,6 +3,20 @@ import Settler from "../src/settler";
 import { PayloadError } from "../src/utils";
 import type { Result } from "../src/types";
 
+test("should validate options correctly", () => {
+  expect(() => {
+    new Settler({ concurrency: 0 });
+  }).toThrowError(new RangeError("Concurrency must be at least 1"));
+
+  expect(() => {
+    new Settler({ concurrency: 1, onFail: { attempts: -1 } });
+  }).toThrowError(new RangeError("Attempts must be at least 0"));
+
+  expect(() => {
+    new Settler({ concurrency: 1, onFail: { attempts: 1, delay: -1 } });
+  }).toThrowError(new RangeError("Delay must be at least 0"));
+});
+
 describe("Settler class", () => {
   const optionsIter = [1, 1, 2, 3, 4, 5].values();
   let settler: Settler<number, number>;
