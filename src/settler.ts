@@ -22,6 +22,7 @@ class Settler<T, R> {
   private readonly limit: LimitFunction;
 
   constructor(public readonly options: SettleOptions) {
+    this.validateOptions(options);
     this.limit = pLimit(options.concurrency);
   }
 
@@ -30,6 +31,20 @@ class Settler<T, R> {
       activeCount: this.limit.activeCount,
       pendingCount: this.limit.pendingCount,
     };
+  }
+
+  private validateOptions(options: SettleOptions) {
+    if (options.concurrency < 1) {
+      throw new RangeError("Concurrency must be at least 1");
+    }
+
+    if (Number(options.onFail?.attempts) < 0) {
+      throw new RangeError("Attempts must be at least 0");
+    }
+
+    if (Number(options.onFail?.delay) < 0) {
+      throw new RangeError("Delay must be at least 0");
+    }
   }
 
   public stop() {
@@ -57,7 +72,10 @@ class Settler<T, R> {
             index,
             retry,
           });
-          await delay(this.options.onFail?.delay);
+
+          this.options.onFail?.delay &&
+            (await delay(this.options.onFail.delay));
+
           return this.handleItem(item, index, fn, retry - 1)();
         }
 

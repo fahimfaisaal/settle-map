@@ -4,7 +4,7 @@ export type SettleOptions = {
   concurrency: number;
   onFail?: {
     attempts: number;
-    delay: number;
+    delay?: number;
   };
 };
 

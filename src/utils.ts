@@ -31,5 +31,5 @@ export const mergeOptions = (
   };
 };
 
-export const delay = (ms = 0): Promise<number> =>
+export const delay = (ms: number): Promise<number> =>
   new Promise((resolve) => setTimeout(() => resolve(ms), ms));
