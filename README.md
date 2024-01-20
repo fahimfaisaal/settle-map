@@ -1,8 +1,14 @@
 # Settle Map
 
-> Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency.
+> Settle Map is a tool that combines the features of Promise.allSettled and Array.map. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
 
-## How it works
+## ⚙️ Installation
+
+```bash
+npm i settle-map
+```
+
+## 📚 How it works
 
 ```ts
 import settleMap from "settle-map";
@@ -23,7 +29,7 @@ const settled = settleMap(
 
 ### Get live response by listening events
 
-Get response on resolve any item immediately
+Get response value on resolve any item immediately
 
 ```ts
 settled.on("resolve", ({ value, index }) => {
@@ -31,7 +37,7 @@ settled.on("resolve", ({ value, index }) => {
 });
 ```
 
-Get result immediately on reject any item
+Catch error immediately on reject any item
 
 ```ts
 settled.on("reject", ({ error, item, index }) => {
@@ -94,7 +100,7 @@ console.log(status);
 */
 ```
 
-### Retry control on reject or fail promises
+### Retry options on reject or fail promises
 
 You could specify a retry limit and delay for each promise, in case it fails or is rejected.
 

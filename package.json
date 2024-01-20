@@ -6,7 +6,7 @@
   "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
   "private": false,
-  "author": "Fahim Faisal",
+  "author": "Fahim Faisaal",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts -d lib --clean --minify",
     "test": "vitest run",
@@ -22,5 +22,17 @@
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
-  }
+  },
+  "keywords": [
+    "promise",
+    "limited",
+    "concurrency",
+    "batch",
+    "ratelimit",
+    "task",
+    "queue",
+    "async",
+    "await",
+    "promises"
+  ]
 }
