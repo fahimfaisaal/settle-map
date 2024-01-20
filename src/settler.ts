@@ -57,7 +57,10 @@ class Settler<T, R> {
             index,
             retry,
           });
-          await delay(this.options.onFail?.delay);
+
+          this.options.onFail?.delay &&
+            (await delay(this.options.onFail.delay));
+
           return this.handleItem(item, index, fn, retry - 1)();
         }
 
