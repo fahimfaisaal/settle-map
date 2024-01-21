@@ -1,6 +1,8 @@
 # Settle Map
 
-> Settle Map is a tool that combines the features of Promise.allSettled and Array.map. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/fahimfaisaal/settle-map/.github%2Fworkflows%2Fmain.yml?branch=main&style=flat&logo=github-actions&label=CI) ![NPM Downloads](https://img.shields.io/npm/dw/settle-map?style=flat&logo=npm&logoColor=red&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fsettle-map) ![GitHub Repo stars](https://img.shields.io/github/stars/fahimfaisaal/settle-map?style=flat&logo=github&link=https%3A%2F%2Fgithub.com%2Ffahimfaisaal%2Fsettle-map)
+
+Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
 
 ## ⚙️ Installation
 
@@ -61,6 +63,9 @@ settled.on("complete", ({ values, error }) => {
 });
 ```
 
+> [!NOTE]
+> Each event can only trigger one function. If you try to set up multiple listeners for the same event, the most recent one will replace any earlier ones.
+
 ### Get the final result at once
 
 To wait and get all result at once an `all` getter return you the universal resolved promise
@@ -76,9 +81,17 @@ console.log(result);
 */
 ```
 
+### Wait Until All Processes Are Done
+
+If you want to wait until all processes are done, you can use the `.waitUntilFinished` method.
+
+```ts
+await settled.waitUntilFinished(); // will return always a resolved promise
+```
+
 ### Stop all process when you want
 
-you could stop the all process any time and get the current result using `stop` function
+you could stop the all process any time and get the current result using `stop` method
 
 ```ts
 const result = settled.stop();
@@ -112,5 +125,33 @@ const options = {
     delay: 2000, // ms
   },
 };
-const settled = settleMap(items, asyncMapFunction, options);
+const settled = settleMap(items, asyncMapmethod, options);
 ```
+
+## 📖 API Reference
+
+### `settleMap(items, fn, options)`
+
+A function that settles promises returned by the provided function (`fn`) for each item in the `items` array. The promises are settled according to the provided `options`.
+
+#### Parameters
+
+- `items` (`T[]`): An array of items to be processed.
+- `fn` (`(item: T, index: number) => Promise<R>`): A function that takes an item and its index as parameters and returns a Promise.
+- `options` (`SettleOptions | number`): An object that specifies the concurrency and retry options. If a number is provided, it is treated as the concurrency level.
+
+#### Return Value
+
+Returns an object with the following properties and methods:
+
+- `all`: A promise that resolves when all items have been processed. The promise resolves to an array of results in the same order as the input items.
+- `waitUntilFinished()`: A method that returns a promise that resolves when all items have been processed, regardless of whether they succeeded or failed.
+- `status()`: A method that returns the current status of the settling process.
+- `on(event, listener)`: A method that allows you to listen for certain events.
+- `stop()`: A method that stops the settling process and return the current result.
+
+## 👤 Author (Fahim Faisaal)
+
+- GitHub: [@fahimfaisaal](https://github.com/fahimfaisaal)
+- Twitter: [@FahimFaisaal](https://twitter.com/FahimFaisaal)
+- LinkedIn: [in/fahimfaisaal](https://www.linkedin.com/in/fahimfaisaal/)
