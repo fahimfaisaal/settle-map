@@ -14,6 +14,7 @@ const settleMap = <T, R>(
     get all() {
       return promise;
     },
+    waitUntilFinished: () => settler.waitUntilFinished(),
     status() {
       return settler.status;
     },

@@ -43,8 +43,8 @@ describe("Settler class", () => {
     expect(status.pendingCount).toBe(0);
   });
 
-  it("should clear the queue", async () => {
-    await settler.settle([1, 2, 3], async (item) => item);
+  it("should stop the queue", async () => {
+    settler.settle([1, 2, 3], async (item) => item);
     settler.stop();
     expect(settler.status.pendingCount).toBe(0);
     expect(settler.status.activeCount).toBe(0);
@@ -80,13 +80,15 @@ describe("Settler class", () => {
     settler.on("reject", rejectMockFunc);
     settler.on("complete", completeMockFunc);
 
-    await settler.settle(items, async (item) => {
+    settler.settle(items, async (item) => {
       if (item % 2 !== 0) {
         return item * 2;
       }
 
       throw new Error("test");
     });
+
+    await settler.waitUntilFinished();
 
     resolveMockFunc.mock.calls.forEach((call) => {
       expect(call[0].value).toBe(valuesIter.next().value);
