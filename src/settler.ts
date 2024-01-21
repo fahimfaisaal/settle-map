@@ -53,6 +53,10 @@ class Settler<T, R> {
     return this.result;
   }
 
+  public async waitUntilFinished() {
+    await Promise.all(this.promises);
+  }
+
   private handleItem(
     item: T,
     index: number,

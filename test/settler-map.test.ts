@@ -1,7 +1,7 @@
 import { test, expect, vi } from "vitest";
 import settleMap from "../src";
 import { PayloadError } from "../src/utils";
-import type { PayloadType } from "../src/types";
+import type { Result } from "../src/types";
 
 test("should settle promises and return results", async () => {
   const items = [1, 2, 3, 4, 5];
@@ -71,7 +71,7 @@ test("should emit all events correctly", async () => {
   settle.on("reject", rejectMockFunc);
   settle.on("complete", completeMockFunc);
 
-  await settle.all;
+  await settle.waitUntilFinished();
 
   resolveMockFunc.mock.calls.forEach((call) => {
     expect(call[0].value).toBe(valuesIter.next().value);
@@ -96,10 +96,7 @@ test("should emit all events correctly", async () => {
 
         return result;
       },
-      { values: [], errors: [] } as {
-        values: number[];
-        errors: PayloadError<PayloadType<number>>[];
-      }
+      { values: [], errors: [] } as Result<number, number>
     )
   );
 });
