@@ -6,6 +6,7 @@
     "type": "git",
     "url": "fahimfaisaal/settle-map"
   },
+  "bugs": "https://github.com/fahimfaisaal/settle-map/issues",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
