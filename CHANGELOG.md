@@ -1,5 +1,11 @@
 # settle-map
 
+## 1.1.0
+
+### Minor Changes
+
+- 9cf245f: Add new waitUntilFinished method
+
 ## 1.0.1
 
 ### Patch Changes
