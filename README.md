@@ -2,7 +2,7 @@
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/fahimfaisaal/settle-map/.github%2Fworkflows%2Fmain.yml?branch=main&style=flat&logo=github-actions&label=CI) ![NPM Downloads](https://img.shields.io/npm/dm/settle-map?style=flat&logo=npm&logoColor=red&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fsettle-map) ![GitHub Repo stars](https://img.shields.io/github/stars/fahimfaisaal/settle-map?style=flat&logo=github&link=https%3A%2F%2Fgithub.com%2Ffahimfaisaal%2Fsettle-map)
 
-Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
+Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises, providing results flexibility and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
 
 ## ⚙️ Installation
 
@@ -125,7 +125,7 @@ const options = {
     delay: 2000, // ms
   },
 };
-const settled = settleMap(items, asyncMapmethod, options);
+const settled = settleMap(items, asyncMapFunction, options);
 ```
 
 ## 📖 API Reference
@@ -138,13 +138,13 @@ A function that settles promises returned by the provided function (`fn`) for ea
 
 - `items` (`T[]`): An array of items to be processed.
 - `fn` (`(item: T, index: number) => Promise<R>`): A function that takes an item and its index as parameters and returns a Promise.
-- `options` (`SettleOptions | number`): An object that specifies the concurrency and retry options. If a number is provided, it is treated as the concurrency level.
+- `options` (`SettleOptions | number`): An object that specifies the concurrency and retry options. If a number is provided, it is treated as the concurrency level. default option is `1`
 
 #### Return Value
 
 Returns an object with the following properties and methods:
 
-- `all`: A promise that resolves when all items have been processed. The promise resolves to an array of results in the same order as the input items.
+- `all`: A promise that resolves when all items have been processed and return the resolved and rejects items in a single object.
 - `waitUntilFinished()`: A method that returns a promise that resolves when all items have been processed, regardless of whether they succeeded or failed.
 - `status()`: A method that returns the current status of the settling process.
 - `on(event, listener)`: A method that allows you to listen for certain events.
