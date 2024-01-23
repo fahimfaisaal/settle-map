@@ -1,4 +1,4 @@
-import pLimit, { type LimitFunction } from "p-limit";
+import pLimit, { type Limit } from "p-limit";
 import { PayloadError, delay } from "./utils";
 import type {
   SettleOptions,
@@ -19,7 +19,7 @@ class Settler<T, R> {
     errors: [],
   };
   private readonly events = new EventEmitter<T, R>();
-  private readonly limit: LimitFunction;
+  private readonly limit: Limit;
 
   constructor(public readonly options: SettleOptions) {
     this.validateOptions(options);
