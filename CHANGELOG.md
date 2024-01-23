@@ -1,5 +1,11 @@
 # settle-map
 
+## 1.1.1
+
+### Patch Changes
+
+- 86e0576: downgraded the p-limit version for module export/import issue
+
 ## 1.1.0
 
 ### Minor Changes
