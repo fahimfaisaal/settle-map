@@ -20,16 +20,14 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --strict-peer-dependencies]
       - uses: actions/setup-node@v3
         with:
           node-version: 20.x
           cache: "pnpm"
 
-      - run: pnpm install
-      - name: Create Release Pull Request or Publish
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Create Release Pull Request or Publish to NPM 🚀
         id: changesets
         uses: changesets/action@v1
         with:
