@@ -14,7 +14,7 @@ export type StatusType = {
 };
 
 export interface Listener<T, R> {
-  resolve?: (payload: { value: R; index: number }) => void;
+  resolve?: (payload: { value: R; item: T; index: number }) => void;
   reject?: (payload: { error: Error; item: T; index: number }) => void;
   retry?: (payload: {
     error: Error;

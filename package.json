@@ -41,5 +41,8 @@
     "async",
     "await",
     "promises"
-  ]
+  ],
+  "publishConfig": {
+    "provenance": true
+  }
 }

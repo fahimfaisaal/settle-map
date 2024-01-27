@@ -66,7 +66,7 @@ class Settler<T, R> {
     return async (): Promise<void> => {
       try {
         const value = await fn(item, index);
-        this.events.emit("resolve", { value, index });
+        this.events.emit("resolve", { value, item, index });
         this.result.values.push(value);
       } catch (error) {
         if (retry >= 1) {
