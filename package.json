@@ -1,7 +1,7 @@
 {
   "name": "settle-map",
   "description": "Settle multiple promises concurrently and get the results in a cool way",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "fahimfaisaal/settle-map"
