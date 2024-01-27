@@ -1,5 +1,11 @@
 # settle-map
 
+## 1.2.0
+
+### Minor Changes
+
+- de2ad41: Add item with parameters on emit resolve event
+
 ## 1.1.1
 
 ### Patch Changes
