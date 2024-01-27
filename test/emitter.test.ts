@@ -17,6 +17,7 @@ describe("it all emit methods", () => {
   const payloads = {
     resolve: {
       value: 123,
+      item: "it",
       index: 0,
       status: { activeCount: 0, pendingCount: 0 },
     },
