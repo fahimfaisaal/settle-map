@@ -1,8 +1,10 @@
 src
 test
+
 .changeset
 .github
+.nvmrc
+
 pnpm-lock.yaml
 tsconfig.json
 vit.config.ts
-
