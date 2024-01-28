@@ -37,21 +37,11 @@ describe("Settler class", () => {
     expect(settler.options.onFail?.delay).toBeUndefined();
   });
 
-  it("should return correct status", () => {
-    const status = settler.status;
-    expect(status.activeCount).toBe(0);
-    expect(status.pendingCount).toBe(0);
-  });
-
-  it("should stop the queue", async () => {
-    settler.settle([1, 2, 3], async (item) => item);
-    settler.stop();
-    expect(settler.status.pendingCount).toBe(0);
-    expect(settler.status.activeCount).toBe(0);
-  });
-
   it("should settle promises and return results", async () => {
-    const res = await settler.settle([1, 2, 3, 4, 5], async (item) => item * 2);
+    const res = (await settler.settle(
+      [1, 2, 3, 4, 5],
+      async (item) => item * 2
+    )) as Result<number, number>;
     expect(res.values).toEqual([2, 4, 6, 8, 10]);
     expect(res.errors).toEqual([]);
   });
@@ -76,9 +66,9 @@ describe("Settler class", () => {
     const rejectMockFunc = vi.fn();
     const completeMockFunc = vi.fn();
 
-    settler.on("resolve", resolveMockFunc);
-    settler.on("reject", rejectMockFunc);
-    settler.on("complete", completeMockFunc);
+    settler.events.on("resolve", resolveMockFunc);
+    settler.events.on("reject", rejectMockFunc);
+    settler.events.on("complete", completeMockFunc);
 
     settler.settle(items, async (item) => {
       if (item % 2 !== 0) {
@@ -88,7 +78,7 @@ describe("Settler class", () => {
       throw new Error("test");
     });
 
-    await settler.waitUntilFinished();
+    await settler.promise;
 
     resolveMockFunc.mock.calls.forEach((call) => {
       expect(call[0].value).toBe(valuesIter.next().value);

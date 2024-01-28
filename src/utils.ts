@@ -15,6 +15,7 @@ export const mergeOptions = (
       attempts: 0,
       delay: 0,
     },
+    omitResult: false,
   };
 
   if (typeof options === "number") {
