@@ -21,7 +21,7 @@ export interface Listener<T, R> {
     error: Error;
     item: T;
     index: number;
-    retry: number;
+    tried: number;
   }) => void;
   complete?: (payload: ReturnType<T, R>) => void;
 }

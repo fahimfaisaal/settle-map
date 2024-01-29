@@ -50,7 +50,7 @@ settled.on("reject", ({ error, item, index }) => {
 Get response immediately on retry any item
 
 ```ts
-settled.on("retry", ({ error, retry, item, index }) => {
+settled.on("retry", ({ error, item, index, tried }) => {
   // your actions
 });
 ```

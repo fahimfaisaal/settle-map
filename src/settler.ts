@@ -55,7 +55,7 @@ class Settler<T, R> {
             error: error as Error,
             item,
             index,
-            retry,
+            tried: (this.options.onFail?.attempts ?? retry) - retry + 1,
           });
 
           this.options.onFail?.delay &&
