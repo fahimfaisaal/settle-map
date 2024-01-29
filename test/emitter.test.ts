@@ -33,7 +33,7 @@ describe("it all emit methods", () => {
       error: new Error("it"),
       item: "it",
       index: 0,
-      retry: 0,
+      tried: 0,
       status: { activeCount: 0, pendingCount: 0 },
     },
     complete: {
