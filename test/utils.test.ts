@@ -16,18 +16,26 @@ test("should merge options correctly with number only", () => {
   expect(options.concurrency).toBe(2);
   expect(options.onFail?.attempts).toBe(0);
   expect(options.onFail?.delay).toBe(0);
+  expect(options.omitResult).toBe(false);
 });
 
 test("should merge options correctly with object", () => {
   const options = mergeOptions({
-    concurrency: 2,
     onFail: {
       attempts: 2,
       delay: 1000,
     },
+    omitResult: true,
   });
 
-  expect(options.concurrency).toBe(2);
+  expect(options.concurrency).toBe(1);
   expect(options.onFail?.attempts).toBe(2);
   expect(options.onFail?.delay).toBe(1000);
+  expect(options.omitResult).toBe(true);
 });
+
+/**
+ * how to run test
+ * version traking on challenge feature
+ * lerna version patch
+ */

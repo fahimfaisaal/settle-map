@@ -16,7 +16,7 @@ function settleMap<T, R>(
 function settleMap<T, R>(
   items: T[],
   fn: (item: T, index: number) => Promise<R>,
-  options?: number | (SettleOptions & { omitResult?: false | undefined })
+  options?: number | SettleOptions
 ): ReturnObjectType<T, R> & {
   then: (onfulfilled?: (value: Result<T, R>) => unknown) => Promise<unknown>;
   abort: () => Result<T, R>;

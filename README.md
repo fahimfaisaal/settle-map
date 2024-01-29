@@ -155,6 +155,10 @@ Returns an object with the following methods:
 > [!NOTE]
 > Since the return value has `then` method so the `settleMap` function is awaitable. Followed the `Thenable` approach. [see MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#thenables)
 
+### `createSettleMap(options)`
+
+A curry function of settleMap that will help you to set default options and use the map function with same option everywhere. even you could modify the options for each individual use.
+
 ## 👤 Author (Fahim Faisaal)
 
 - GitHub: [@fahimfaisaal](https://github.com/fahimfaisaal)
