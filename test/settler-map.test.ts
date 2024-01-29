@@ -7,18 +7,29 @@ test("should settle promises and return results", async () => {
   const items = [1, 2, 3, 4, 5];
   const settle = settleMap(items, async (item) => item);
 
-  expect(settle.all).instanceOf(Promise);
-  expect(settle.stop).instanceOf(Function);
+  expect(settle.abort).instanceOf(Function);
   expect(settle.on).instanceOf(Function);
-  expect(await settle.all).toEqual({
+  expect(settle.waitUntilFinished).instanceOf(Function);
+  expect(settle.status).instanceOf(Function);
+  expect(await settle).toEqual({
     values: items,
     errors: [],
   });
 });
 
+test("should return undefined when omitResult is true", async () => {
+  const items = [1, 2, 3, 4, 5];
+  const settle = settleMap(items, async (item) => item, {
+    omitResult: true,
+    concurrency: 3,
+  });
+
+  expect(await settle).toBeUndefined();
+});
+
 test("should settle promises and return results with all method", async () => {
   const items = [1, 2, 3, 4, 5];
-  const result = await settleMap(items, async (item) => item, 2).all;
+  const result = await settleMap(items, async (item) => item, 2);
 
   expect(result).toEqual({
     values: items,
@@ -33,7 +44,7 @@ test("should return correct status", () => {
   expect(settle.status().pendingCount).toBe(5);
   expect(settle.status().activeCount).toBe(0);
 
-  settle.stop();
+  settle.abort();
 
   expect(settle.status().pendingCount).toBe(0);
   expect(settle.status().activeCount).toBe(0);

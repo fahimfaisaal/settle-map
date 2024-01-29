@@ -1,36 +1,27 @@
 import pLimit, { type Limit } from "p-limit";
 import { PayloadError, delay } from "./utils";
-import type {
-  SettleOptions,
-  PayloadType,
-  Listener,
-  EventListener,
-  Result,
-  Callback,
-} from "./types";
+import type { SettleOptions, PayloadType, Result, Callback } from "./types";
 import EventEmitter from "./emitter";
 
 class Settler<T, R> {
   private readonly promises: Promise<
     ReturnType<typeof this.limit> | unknown
   >[] = [];
-  private readonly result: Result<T, R> = {
-    values: [],
-    errors: [],
-  };
-  private readonly events = new EventEmitter<T, R>();
-  private readonly limit: Limit;
+  private processed = 0;
+
+  public readonly result: Result<T, R> | undefined;
+  public readonly limit: Limit;
+
+  public readonly events = new EventEmitter<T, R>();
+  public promise = Promise.all(this.promises);
 
   constructor(public readonly options: SettleOptions) {
     this.validateOptions(options);
     this.limit = pLimit(options.concurrency);
-  }
 
-  get status() {
-    return {
-      activeCount: this.limit.activeCount,
-      pendingCount: this.limit.pendingCount,
-    };
+    if (!this.options.omitResult) {
+      this.result = { values: [], errors: [] };
+    }
   }
 
   private validateOptions(options: SettleOptions) {
@@ -47,16 +38,6 @@ class Settler<T, R> {
     }
   }
 
-  public stop() {
-    this.limit.clearQueue();
-
-    return this.result;
-  }
-
-  public async waitUntilFinished() {
-    await Promise.all(this.promises);
-  }
-
   private handleItem(
     item: T,
     index: number,
@@ -67,14 +48,14 @@ class Settler<T, R> {
       try {
         const value = await fn(item, index);
         this.events.emit("resolve", { value, item, index });
-        this.result.values.push(value);
+        this.result?.values.push(value);
       } catch (error) {
         if (retry >= 1) {
           this.events.emit("retry", {
             error: error as Error,
             item,
             index,
-            retry,
+            tried: (this.options.onFail?.attempts ?? retry) - retry + 1,
           });
 
           this.options.onFail?.delay &&
@@ -83,7 +64,7 @@ class Settler<T, R> {
           return this.handleItem(item, index, fn, retry - 1)();
         }
 
-        this.result.errors.push(
+        this.result?.errors.push(
           new PayloadError<PayloadType<T>>((error as Error).message, {
             item,
             index,
@@ -94,6 +75,15 @@ class Settler<T, R> {
           item,
           index,
         });
+      } finally {
+        this.processed++;
+
+        if (this.processed === this.promises.length) {
+          !this.options.omitResult &&
+            this.events.emit("complete", this.result as Result<T, R>);
+          this.events.destroy();
+          this.processed = 0;
+        }
       }
     };
   }
@@ -103,16 +93,10 @@ class Settler<T, R> {
       this.promises.push(this.limit(this.handleItem(item, index, fn)));
     }
 
-    await Promise.all(this.promises);
-    this.events.emit("complete", this.result);
-    return this.result;
-  }
+    this.promise = Promise.all(this.promises);
+    await this.promise;
 
-  public on<E extends keyof Listener<T, R>>(
-    event: E,
-    listener: EventListener<T, R, E>
-  ) {
-    this.events.listeners[event] = listener;
+    return this.result;
   }
 }
 

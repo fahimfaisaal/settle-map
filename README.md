@@ -2,7 +2,7 @@
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/fahimfaisaal/settle-map/.github%2Fworkflows%2Fmain.yml?branch=main&style=flat&logo=github-actions&label=CI) ![NPM Downloads](https://img.shields.io/npm/dm/settle-map?style=flat&logo=npm&logoColor=red&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fsettle-map) ![GitHub Repo stars](https://img.shields.io/github/stars/fahimfaisaal/settle-map?style=flat&logo=github&link=https%3A%2F%2Fgithub.com%2Ffahimfaisaal%2Fsettle-map)
 
-Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises, providing results flexibility and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
+Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises, providing results flexibility with hassle free error handling and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
 
 ## ⚙️ Installation
 
@@ -34,7 +34,7 @@ const settled = settleMap(
 Get response value on resolve any item immediately
 
 ```ts
-settled.on("resolve", ({ value, index }) => {
+settled.on("resolve", ({ value, item, index }) => {
   // your actions
 });
 ```
@@ -50,12 +50,14 @@ settled.on("reject", ({ error, item, index }) => {
 Get response immediately on retry any item
 
 ```ts
-settled.on("retry", ({ error, retry, item, index }) => {
+settled.on("retry", ({ error, item, index, tried }) => {
   // your actions
 });
 ```
 
 Get the final result object
+
+> The `complete` event will not be emitted when `omitResult` options will be `true`.
 
 ```ts
 settled.on("complete", ({ values, error }) => {
@@ -68,11 +70,11 @@ settled.on("complete", ({ values, error }) => {
 
 ### Get the final result at once
 
-To wait and get all result at once an `all` getter return you the universal resolved promise
+To wait and get all result at once you just have to add `await` keyword like casual `async/await` approach or invoke the `then` method.
 
 ```ts
-const result = await settled.all; // An universal resolved promise
-console.log(result);
+const result = await settled; // An universal promise like syntax that returns only resolved response
+
 /* output
 {
   values: [1, 3, 5],
@@ -83,18 +85,18 @@ console.log(result);
 
 ### Wait Until All Processes Are Done
 
-If you want to wait until all processes are done, you can use the `.waitUntilFinished` method.
+If you want to wait until all processes are done, you can use the `waitUntilFinished` method.
 
 ```ts
 await settled.waitUntilFinished(); // will return always a resolved promise
 ```
 
-### Stop all process when you want
+### Abort all process when you need
 
-you could stop the all process any time and get the current result using `stop` method
+you could abort the all remaining processes any time and get the current result using `abort` method
 
 ```ts
-const result = settled.stop();
+const result = settled.abort();
 ```
 
 ### Get real time status
@@ -124,6 +126,7 @@ const options = {
     attempts: 3, // the number of attempts on fail
     delay: 2000, // ms
   },
+  omitResult: true, // the final result will be undefined incase it's true.
 };
 const settled = settleMap(items, asyncMapFunction, options);
 ```
@@ -138,17 +141,23 @@ A function that settles promises returned by the provided function (`fn`) for ea
 
 - `items` (`T[]`): An array of items to be processed.
 - `fn` (`(item: T, index: number) => Promise<R>`): A function that takes an item and its index as parameters and returns a Promise.
-- `options` (`SettleOptions | number`): An object that specifies the concurrency and retry options. If a number is provided, it is treated as the concurrency level. default option is `1`
+- `options` (`SettleOptions | number`): An object that specifies the concurrency and retry options. If a number is provided, it is treated as the concurrency level. Default is `1`
 
 #### Return Value
 
-Returns an object with the following properties and methods:
+Returns an object with the following methods:
 
-- `all`: A promise that resolves when all items have been processed and return the resolved and rejects items in a single object.
 - `waitUntilFinished()`: A method that returns a promise that resolves when all items have been processed, regardless of whether they succeeded or failed.
 - `status()`: A method that returns the current status of the settling process.
 - `on(event, listener)`: A method that allows you to listen for certain events.
-- `stop()`: A method that stops the settling process and return the current result.
+- `abort()`: A method that aborts all remain processes and return the current result.
+
+> [!NOTE]
+> Since the return value has `then` method so the `settleMap` function is awaitable. Followed the `Thenable` approach. [see MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#thenables)
+
+### `createSettleMap(options)`
+
+A curry function of settleMap that will help you to set default options and use the map function with same option everywhere. even you could modify the options for each individual use.
 
 ## 👤 Author (Fahim Faisaal)
 

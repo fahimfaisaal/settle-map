@@ -6,26 +6,29 @@ export class PayloadError<TPayload> extends Error {
   }
 }
 
-export const mergeOptions = (
-  options: SettleOptions | number
-): SettleOptions => {
-  const defaultOptions = {
-    concurrency: 1,
-    onFail: {
-      attempts: 0,
-      delay: 0,
-    },
-  };
+const defaultOptions: SettleOptions = {
+  concurrency: 1,
+  onFail: {
+    attempts: 0,
+    delay: 0,
+  },
+  omitResult: false,
+};
 
+export const mergeOptions = (
+  options: Partial<SettleOptions> | number,
+  oldOptions = defaultOptions
+): SettleOptions => {
   if (typeof options === "number") {
-    return { ...defaultOptions, concurrency: options };
+    return { ...oldOptions, concurrency: options };
   }
 
   return {
-    ...defaultOptions,
+    ...oldOptions,
     ...options,
     onFail: {
-      ...defaultOptions.onFail,
+      attempts: options.onFail?.attempts ?? 0,
+      ...oldOptions.onFail,
       ...options.onFail,
     },
   };

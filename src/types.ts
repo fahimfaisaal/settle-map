@@ -6,6 +6,7 @@ export type SettleOptions = {
     attempts: number;
     delay?: number;
   };
+  omitResult?: boolean;
 };
 
 export type StatusType = {
@@ -20,7 +21,7 @@ export interface Listener<T, R> {
     error: Error;
     item: T;
     index: number;
-    retry: number;
+    tried: number;
   }) => void;
   complete?: (payload: ReturnType<T, R>) => void;
 }
@@ -30,10 +31,6 @@ export type Result<T, R> = {
   errors: PayloadError<PayloadType<T>>[];
 };
 
-export type EventListener<T, R, E extends keyof Listener<T, R>> = (
-  payload: Parameters<NonNullable<Listener<T, R>[E]>>[0]
-) => void;
-
 export type PayloadType<T> = { item: T; index: number };
 
 export type ReturnType<T, R> = {
@@ -41,9 +38,13 @@ export type ReturnType<T, R> = {
   errors: PayloadError<PayloadType<T>>[];
 };
 
-export type Emit<T, R> = (
-  event: keyof Listener<T, R>,
-  args: Parameters<NonNullable<Listener<T, R>[keyof Listener<T, R>]>>[0]
-) => void;
-
 export type Callback<T, R> = (item: T, index: number) => Promise<R>;
+
+export type ReturnObjectType<T, R> = {
+  waitUntilFinished(): Promise<void>;
+  status(): { activeCount: number; pendingCount: number };
+  on: <K extends keyof Listener<T, R>>(
+    event: K,
+    listener: Listener<T, R>[K]
+  ) => void;
+};

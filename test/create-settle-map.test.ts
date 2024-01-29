@@ -1,49 +1,36 @@
-import { expect, it, describe, test, vi, beforeEach } from "vitest";
-import Settler from "../src/settler";
+import { it, test, expect, describe, vi, beforeEach } from "vitest";
+import { createSettleMap } from "../src";
 import { PayloadError } from "../src/utils";
 import type { Result } from "../src/types";
 
-test("should validate options correctly", () => {
-  expect(() => {
-    new Settler({ concurrency: 0 });
-  }).toThrowError(new RangeError("Concurrency must be at least 1"));
-
-  expect(() => {
-    new Settler({ concurrency: 1, onFail: { attempts: -1 } });
-  }).toThrowError(new RangeError("Attempts must be at least 0"));
-
-  expect(() => {
-    new Settler({ concurrency: 1, onFail: { attempts: 1, delay: -1 } });
-  }).toThrowError(new RangeError("Delay must be at least 0"));
+test("should create a function", () => {
+  expect(createSettleMap).toBeInstanceOf(Function);
 });
 
-describe("Settler class", () => {
-  const optionsIter = [1, 1, 2, 3, 4, 5].values();
-  let settler: Settler<number, number>;
+describe("Test functionalities of createSettleMap", () => {
+  let map: ReturnType<typeof createSettleMap>;
 
   beforeEach(() => {
-    settler = new Settler<number, number>({
-      concurrency: optionsIter.next().value,
+    map = createSettleMap({
+      concurrency: 5,
     });
   });
 
-  it("should create an instance of EventEmitter", () => {
-    expect(settler).toBeInstanceOf(Settler);
+  it("should work despite no options passed", async () => {
+    expect(await map([1, 2, 3], async (item) => item)).toEqual({
+      values: [1, 2, 3],
+      errors: [],
+    });
   });
 
-  it("should correctly initialize Settler with options", () => {
-    expect(settler.options.concurrency).toBe(1);
-    expect(settler.options.onFail?.attempts).toBeUndefined();
-    expect(settler.options.onFail?.delay).toBeUndefined();
-  });
-
-  it("should settle promises and return results", async () => {
-    const res = (await settler.settle(
-      [1, 2, 3, 4, 5],
-      async (item) => item * 2
-    )) as Result<number, number>;
-    expect(res.values).toEqual([2, 4, 6, 8, 10]);
-    expect(res.errors).toEqual([]);
+  it("should work with merge options", async () => {
+    expect(
+      await map([1, 2, 3], async (item) => item, { omitResult: true })
+    ).toBeUndefined();
+    expect(await map([1, 2, 3], async (item) => item, 2)).toEqual({
+      values: [1, 2, 3],
+      errors: [],
+    });
   });
 
   it("should emit all events correctly", async () => {
@@ -66,11 +53,7 @@ describe("Settler class", () => {
     const rejectMockFunc = vi.fn();
     const completeMockFunc = vi.fn();
 
-    settler.events.on("resolve", resolveMockFunc);
-    settler.events.on("reject", rejectMockFunc);
-    settler.events.on("complete", completeMockFunc);
-
-    settler.settle(items, async (item) => {
+    const settled = map(items, async (item) => {
       if (item % 2 !== 0) {
         return item * 2;
       }
@@ -78,7 +61,11 @@ describe("Settler class", () => {
       throw new Error("test");
     });
 
-    await settler.promise;
+    settled.on("resolve", resolveMockFunc);
+    settled.on("reject", rejectMockFunc);
+    settled.on("complete", completeMockFunc);
+
+    await settled.waitUntilFinished();
 
     resolveMockFunc.mock.calls.forEach((call) => {
       expect(call[0].value).toBe(valuesIter.next().value);
