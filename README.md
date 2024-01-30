@@ -27,6 +27,16 @@ const settled = settleMap(
   },
   2 // the concurrency you want to set
 );
+
+// or
+import { createSettleMap } from "settle-map";
+
+// use this map function all over the place with same options
+const map = createSettleMap({ concurrency: 2 });
+
+const settled = map(items, asyncMapFunction);
+// even you could override the default options. like below the concurrency will changed from 2 to 5
+const result = await map(item, asyncMapFunction, 5);
 ```
 
 ### Get live response by listening events
