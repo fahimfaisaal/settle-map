@@ -1,6 +1,9 @@
 # Settle Map
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/fahimfaisaal/settle-map/.github%2Fworkflows%2Fmain.yml?branch=main&style=flat&logo=github-actions&label=CI) ![NPM Downloads](https://img.shields.io/npm/dm/settle-map?style=flat&logo=npm&logoColor=red&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fsettle-map) ![GitHub Repo stars](https://img.shields.io/github/stars/fahimfaisaal/settle-map?style=flat&logo=github&link=https%3A%2F%2Fgithub.com%2Ffahimfaisaal%2Fsettle-map)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/fahimfaisaal/settle-map/.github%2Fworkflows%2Fmain.yml?branch=main&style=flat&logo=github-actions&label=CI)](https://github.com/fahimfaisaal/settle-map/actions/workflows/main.yml)
+[![NPM Downloads](https://img.shields.io/npm/dm/settle-map?style=flat&logo=npm&logoColor=red)](https://www.npmjs.com/package/settle-map)
+[![GitHub Repo stars](https://img.shields.io/github/stars/fahimfaisaal/settle-map?style=flat&logo=github)](https://github.com/fahimfaisaal/settle-map)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/settle-map)](https://socket.dev/npm/package/settle-map)
 
 Settle Map is a tool that combines the features of `Promise.allSettled` and `Array.map`. It simplifies the process of mapping promises, providing results flexibility with hassle free error handling and lets you control how many can run at the same time using concurrency. In other words, it will help you prevent being rate-limited.
 
