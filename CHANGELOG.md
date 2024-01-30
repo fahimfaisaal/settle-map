@@ -1,5 +1,14 @@
 # settle-map
 
+## 2.0.1
+
+### Patch Changes
+
+- bd6373b: Removed mjs build from the lib and improved the readme
+
+  - removed changelog from the npm
+  - improved and fixed readme
+
 ## 2.0.0
 
 ### Major Changes
