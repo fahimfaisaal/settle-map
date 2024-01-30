@@ -9,7 +9,6 @@
   "bugs": "https://github.com/fahimfaisaal/settle-map/issues",
   "license": "MIT",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
   "private": false,
   "author": "Fahim Faisaal",
