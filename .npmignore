@@ -7,4 +7,6 @@ test
 
 pnpm-lock.yaml
 tsconfig.json
-vit.config.ts
+tsup.config.ts
+
+CHANGELOG.md

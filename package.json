@@ -14,10 +14,10 @@
   "private": false,
   "author": "Fahim Faisaal",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts -d lib --clean --minify",
+    "build": "tsup",
     "test": "vitest run",
     "lint": "tsc",
-    "ci": "pnpm run lint && pnpm run test && pnpm run build",
+    "ci": "pnpm lint && pnpm test && pnpm build",
     "release": "pnpm run ci && changeset publish"
   },
   "dependencies": {

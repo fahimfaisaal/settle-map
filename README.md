@@ -13,7 +13,7 @@ npm i settle-map
 ## 📚 How it works
 
 ```ts
-import settleMap from "settle-map";
+import { settleMap } from "settle-map";
 
 const items = [1, 2, 3, 4, 5];
 
