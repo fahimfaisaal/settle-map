@@ -92,8 +92,8 @@ test("should emit all events correctly", async () => {
     expect(call[0].error).toBeInstanceOf(Error);
     const { value } = errorsIter.next();
 
-    expect(call[0].item).toBe(value.payload.item);
-    expect(call[0].index).toBe(value.payload.index);
+    expect(call[0].item).toBe(value?.payload.item);
+    expect(call[0].index).toBe(value?.payload.index);
   });
 
   expect(completeMockFunc).toHaveBeenCalledWith(

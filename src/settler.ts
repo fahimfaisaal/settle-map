@@ -4,9 +4,9 @@ import type { SettleOptions, PayloadType, Result, Callback } from "./types";
 import EventEmitter from "./emitter";
 
 class Settler<T, R> {
-  private readonly promises: Promise<
-    ReturnType<typeof this.limit> | unknown
-  >[] = [];
+  private readonly promises: Array<
+    Promise<ReturnType<typeof this.limit> | unknown>
+  > = [];
   private processed = 0;
 
   public readonly result: Result<T, R> | undefined;
