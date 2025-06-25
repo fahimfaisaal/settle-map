@@ -38,7 +38,7 @@ const settled = settleMap(
     return {
       url: item,
       status: response.status,
-      content: response.text(),
+      content: await response.text(),
     };
   },
   2 // the concurrency you want to set
