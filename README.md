@@ -18,15 +18,28 @@ npm i settle-map
 ```ts
 import { settleMap } from "settle-map";
 
-const items = [1, 2, 3, 4, 5];
+const items = [
+  "https://example.com",
+  "https://news.ycombinator.com",
+  "https://github.com",
+  "https://stackoverflow.com",
+];
 
 const settled = settleMap(
   items, // your items
   async (item, index) => {
-    // your async map function
-    if (item % 2 === 0) throw new Error("Even error");
+    // your async map function - fetch URL and get status
+    const response = await fetch(item);
 
-    return item;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${item}: ${response.status}`);
+    }
+
+    return {
+      url: item,
+      status: response.status,
+      content: response.text(),
+    };
   },
   2 // the concurrency you want to set
 );
